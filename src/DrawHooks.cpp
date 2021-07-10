@@ -1,16 +1,19 @@
 #include "DrawHooks.h"
 
-
-
+#include "Renderer.h"
 
 #include "imgui/imgui.h"
 #include "imgui/imgui_impl_win32.h"
 #include "imgui/imgui_impl_dx11.h"
 
-extern LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
+#include "InputHandler.h"
+
 
 namespace imogui
 {
+	OriginalFn DrawHooks::oReturn = nullptr;
+	std::function<void(Renderer*)> DrawHooks::d3d11DrawCallback = nullptr;
+
 	namespace
 	{
 		ID3D11Device* pDevice = nullptr;
@@ -21,19 +24,6 @@ namespace imogui
 		UINT vps = 1;
 		D3D11_VIEWPORT viewport;
 		HRESULT hr;
-
-		HWND window;
-		WNDPROC oWndProc;
-
-
-		LRESULT __stdcall WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
-		{
-			if (ImGui_ImplWin32_WndProcHandler(hWnd, uMsg, wParam, lParam))
-			{
-				return true;
-			}
-			return CallWindowProc(oWndProc, hWnd, uMsg, wParam, lParam);
-		}
 	}
 
 	HRESULT __stdcall hookD3D11Present(IDXGISwapChain* pSwapChain, UINT SyncInterval, UINT Flags)
@@ -56,15 +46,13 @@ namespace imogui
 			ImGuiIO& io = ImGui::GetIO(); (void)io;
 			ImGui::GetIO().WantCaptureMouse || ImGui::GetIO().WantTextInput || ImGui::GetIO().WantCaptureKeyboard; //control menu with mouse
 			io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;  // Enable Keyboard Controls
-			window = sd.OutputWindow;
 
-			//wndprochandler
-			oWndProc = (WNDPROC)SetWindowLongPtr(window, GWLP_WNDPROC, (LONG_PTR)WndProc);
+			InputHandler::HookWndProc(sd.OutputWindow);
 
-			ImGui_ImplWin32_Init(window);
+			ImGui_ImplWin32_Init(sd.OutputWindow);
 
 			ImGui_ImplDX11_Init(pDevice, pContext);
-			ImGui::GetIO().ImeWindowHandle = window;
+			ImGui::GetIO().ImeWindowHandle = sd.OutputWindow;
 		}
 
 		if (RenderTargetView == nullptr)
@@ -94,7 +82,11 @@ namespace imogui
 		ImGui_ImplWin32_NewFrame();
 		ImGui::NewFrame();
 
-		DrawHooks::d3d11DrawCallback();
+		Renderer::Get()->BeginScene();
+
+		DrawHooks::d3d11DrawCallback(Renderer::Get());
+
+		Renderer::Get()->EndScene();
 
 		ImGui::EndFrame();
 		ImGui::Render();

@@ -2,9 +2,12 @@
 
 namespace imogui
 {
+	class Renderer;
 	class Steamoverlay
 	{
+
 	public:
-		void Hook(std::function<void()> drawCallback);
+		void Hook(std::function<void(Renderer*)> drawCallback);
+		void Unhook();
 	};
 }
