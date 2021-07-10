@@ -6,6 +6,6 @@ namespace imogui
 	{
 
 	public:
-		static int8_t* ScanBytePattern(const char* module, const char* signature);
+		static int8_t* Scan(const char* module, const char* signature);
 	};
 }
