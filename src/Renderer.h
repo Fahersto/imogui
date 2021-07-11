@@ -7,6 +7,24 @@
 
 namespace imogui
 {
+	enum overlay
+	{
+		steam,
+		origin,
+		overwolf,
+		openbroadcast,
+		nvidiashare,
+		msiafterburner,
+		discord
+	};
+
+	enum renderapi
+	{
+		opengl,
+		directx9,
+		directx11
+	};
+
 	class Renderer
 	{
 	private:

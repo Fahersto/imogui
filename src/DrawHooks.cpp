@@ -4,6 +4,7 @@
 
 #include "imgui/imgui.h"
 #include "imgui/imgui_impl_win32.h"
+#include "imgui/imgui_impl_dx9.h"
 #include "imgui/imgui_impl_dx11.h"
 
 #include "InputHandler.h"
@@ -11,8 +12,15 @@
 
 namespace imogui
 {
-	OriginalFn DrawHooks::oReturn = nullptr;
-	std::function<void(Renderer*)> DrawHooks::d3d11DrawCallback = nullptr;
+	std::function<void(Renderer*)> DrawHooks::renderCallback = nullptr;
+
+	// original opengl swapbuffers function
+	OpenGL_SwapBuffers DrawHooks::originalOpenGLSwapBuffers = nullptr;
+
+	Direct3DDevice9_Present DrawHooks::originalDirect3DDevice9Present = nullptr;
+
+	DirectX11_IDXGISwapChain_Present DrawHooks::oDirectX11SwapchainPresent = nullptr;
+	
 
 	namespace
 	{
@@ -24,6 +32,58 @@ namespace imogui
 		UINT vps = 1;
 		D3D11_VIEWPORT viewport;
 		HRESULT hr;
+	}
+
+	int64_t HkHwglSwapBuffers(HDC hdc)
+	{
+		static bool firstTime = true;
+		if (firstTime)
+		{
+			firstTime = false;
+
+		}
+
+		DrawHooks::renderCallback(Renderer::Get());
+
+
+		return DrawHooks::originalOpenGLSwapBuffers(hdc);
+	}
+
+	int64_t __stdcall hkD3D9Present(IDirect3DDevice9* device, __int64 a2, __int64 a3, __int64 a4, __int64 a5)
+	{
+		static bool firstTime = true;
+		if (firstTime)
+		{
+			firstTime = false;
+
+			ImGui::CreateContext();
+			ImGuiIO& io = ImGui::GetIO();
+			io.ConfigFlags = ImGuiConfigFlags_NoMouseCursorChange;
+
+			D3DDEVICE_CREATION_PARAMETERS creationParameters;
+
+			device->GetCreationParameters(&creationParameters);
+
+
+			ImGui_ImplWin32_Init(creationParameters.hFocusWindow);
+			ImGui_ImplDX9_Init(device);
+		}
+
+		ImGui_ImplDX9_NewFrame();
+		ImGui_ImplWin32_NewFrame();
+		ImGui::NewFrame();
+
+		Renderer::Get()->BeginScene();
+
+		DrawHooks::renderCallback(Renderer::Get());
+
+		Renderer::Get()->EndScene();
+
+		ImGui::EndFrame();
+		ImGui::Render();
+		ImGui_ImplDX9_RenderDrawData(ImGui::GetDrawData());
+
+		return DrawHooks::originalDirect3DDevice9Present(device, a2, a3, a4, a5);
 	}
 
 	HRESULT __stdcall hookD3D11Present(IDXGISwapChain* pSwapChain, UINT SyncInterval, UINT Flags)
@@ -84,7 +144,7 @@ namespace imogui
 
 		Renderer::Get()->BeginScene();
 
-		DrawHooks::d3d11DrawCallback(Renderer::Get());
+		DrawHooks::renderCallback(Renderer::Get());
 
 		Renderer::Get()->EndScene();
 
@@ -92,9 +152,22 @@ namespace imogui
 		ImGui::Render();
 		ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
 
-		return DrawHooks::oReturn(pSwapChain, SyncInterval, Flags);
+		return DrawHooks::oDirectX11SwapchainPresent(pSwapChain, SyncInterval, Flags);
 	}
-	int8_t* DrawHooks::GetPointerToHookedSwapchain()
+
+
+	int8_t* DrawHooks::GetPointerToHookedSwapBuffers()
+	{
+		assert(false);
+		return nullptr;
+	}
+
+	int8_t* DrawHooks::GetPointerToHookedDirect3DDevice9Present()
+	{
+		return nullptr;
+	}
+
+	int8_t* DrawHooks::GetPointerToHookedDirectX11SwapchainPresent()
 	{
 		return (int8_t*)hookD3D11Present;
 	}

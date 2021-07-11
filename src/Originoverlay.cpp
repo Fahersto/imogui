@@ -1,4 +1,4 @@
-#include "Discordoverlay.h"
+#include "Originoverlay.h"
 
 #include "DrawHooks.h"
 #include "Utility.h"
@@ -10,16 +10,18 @@ namespace imogui
 {
 	hookftw::Detour swapchainPresentHook;
 
-	void Discordoverlay::Hook(std::function<void(Renderer*)> drawCallback)
+	void Originoverlay::Hook(std::function<void(Renderer*)> drawCallback)
 	{
 		DrawHooks::renderCallback = drawCallback;
+		//x64 d3d11 
+		int8_t* hookAddress = Utility::Scan("igo64.dll", "?");
 
-		//x64 d3d11
-		int8_t* hookAddress = Utility::Scan("DiscordHook64.dll", "56 57 53 48 83 EC 30 44 89 C6 ");
+		//the pattern sadly is way to long..
+		hookAddress += 0x36A30;
 		DrawHooks::oDirectX11SwapchainPresent = (DirectX11_IDXGISwapChain_Present)swapchainPresentHook.Hook(hookAddress, DrawHooks::GetPointerToHookedDirectX11SwapchainPresent());
 	}
 
-	void Discordoverlay::Unhook()
+	void Originoverlay::Unhook()
 	{
 		swapchainPresentHook.Unhook();
 		InputHandler::UnhookWndProc();
