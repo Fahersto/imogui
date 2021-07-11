@@ -64,6 +64,12 @@ namespace imogui
 
 			device->GetCreationParameters(&creationParameters);
 
+			RECT rect;
+			GetWindowRect(creationParameters.hFocusWindow, &rect);
+			Renderer::Get()->SetWidth(rect.right);
+			Renderer::Get()->SetHeight(rect.bottom);
+
+
 			InputHandler::HookWndProc(creationParameters.hFocusWindow);
 
 			ImGui_ImplWin32_Init(creationParameters.hFocusWindow);
@@ -107,6 +113,11 @@ namespace imogui
 			ImGuiIO& io = ImGui::GetIO(); (void)io;
 			ImGui::GetIO().WantCaptureMouse || ImGui::GetIO().WantTextInput || ImGui::GetIO().WantCaptureKeyboard; //control menu with mouse
 			io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;  // Enable Keyboard Controls
+
+			RECT rect;
+			GetWindowRect(sd.OutputWindow, &rect);
+			Renderer::Get()->SetWidth(rect.right);
+			Renderer::Get()->SetHeight(rect.bottom);
 
 			InputHandler::HookWndProc(sd.OutputWindow);
 

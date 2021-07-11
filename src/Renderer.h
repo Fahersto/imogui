@@ -30,6 +30,9 @@ namespace imogui
 	private:
 		static Renderer* _instance;
 
+		int width_ = 0;
+		int height_ = 0;
+
 		Renderer();
 		~Renderer();
 
@@ -37,6 +40,12 @@ namespace imogui
 		static Renderer* Get();
 
 		bool inFrame;
+
+		int GetWidth();
+		int GetHeight();
+
+		void SetWidth(int width);
+		void SetHeight(int height);
 
 		void BeginScene();
 		void EndScene();

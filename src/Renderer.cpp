@@ -27,6 +27,26 @@ namespace imogui
 		return _instance;
 	}
 
+	int Renderer::GetWidth()
+	{
+		return width_;
+	}
+
+	int Renderer::GetHeight()
+	{
+		return height_;
+	}
+
+	void Renderer::SetWidth(int width)
+	{
+		width_ = width;
+	}
+
+	void Renderer::SetHeight(int height)
+	{
+		height_ = height;
+	}
+
 	void Renderer::BeginScene()
 	{
 		ImGuiIO& io = ImGui::GetIO();
