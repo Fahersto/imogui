@@ -26,5 +26,7 @@ add_library(imogui STATIC ${LIBRARY_SOURCES})
 target_link_libraries(imogui hookftw)
 target_link_libraries(imogui imgui)
 
+target_link_libraries(imogui d3d11)
+
 # Link our project executable against Zydis.
 target_compile_features(imogui PRIVATE cxx_std_17)

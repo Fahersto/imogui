@@ -1,13 +1,14 @@
 #include <functional>
 
+#include "Renderer.h"
+
 namespace imogui
 {
-	class Renderer;
 	class Originoverlay
 	{
 
 	public:
-		void Hook(std::function<void(Renderer*)> drawCallback);
+		void Hook(renderapi api, std::function<void(Renderer*)> drawCallback);
 		void Unhook();
 	};
 }

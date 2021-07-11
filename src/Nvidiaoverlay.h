@@ -1,16 +1,17 @@
 #include <functional>
 
+#include "Renderer.h"
+
 namespace imogui
 {
-	class Renderer;
 	class Nvidiaoverlay
 	{
 
 	public:
 		/**
-		* Inject into "NVIDIA Share.exe"
+		* Inject into "NVIDIA Share.exe".
 		*/
-		void Hook(std::function<void(Renderer*)> drawCallback);
+		void Hook(renderapi api, std::function<void(Renderer*)> drawCallback);
 		void Unhook();
 	};
 }
