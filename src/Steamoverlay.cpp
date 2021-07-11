@@ -14,103 +14,42 @@
 
 namespace imogui
 {
-	hookftw::Detour swapchainPresentHook;
+	hookftw::Detour steamoverlayHook;
 
-
-#ifdef _WIN64
-
-#elif _WIN32
-	ID3D11Device* pDevice = nullptr;
-	ID3D11RenderTargetView* RenderTargetView = NULL;
-	ID3D11DeviceContext* pContext = nullptr;
-
-	//viewport
-	UINT vps = 1;
-	D3D11_VIEWPORT viewport;
-	HRESULT hr;
-	void __fastcall hkd3d11Swapchain(hookftw::context* ctx)
-	{
-		IDXGISwapChain* pSwapChain = (IDXGISwapChain*)(ctx->ecx);
-
-		static bool firstTime = true;
-		if (firstTime)
-		{
-			firstTime = false;
-
-			if (SUCCEEDED(pSwapChain->GetDevice(__uuidof(ID3D11Device), (void**)&pDevice)))
-			{
-				pSwapChain->GetDevice(__uuidof(pDevice), (void**)&pDevice);
-				pDevice->GetImmediateContext(&pContext);
-			}
-
-			//imgui
-			DXGI_SWAP_CHAIN_DESC sd;
-			pSwapChain->GetDesc(&sd);
-			ImGui::CreateContext();
-			ImGuiIO& io = ImGui::GetIO(); (void)io;
-			ImGui::GetIO().WantCaptureMouse || ImGui::GetIO().WantTextInput || ImGui::GetIO().WantCaptureKeyboard; //control menu with mouse
-			io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;  // Enable Keyboard Controls
-
-			InputHandler::HookWndProc(sd.OutputWindow);
-
-			ImGui_ImplWin32_Init(sd.OutputWindow);
-
-			ImGui_ImplDX11_Init(pDevice, pContext);
-			ImGui::GetIO().ImeWindowHandle = sd.OutputWindow;
-		}
-
-		if (RenderTargetView == nullptr)
-		{
-			pContext->RSGetViewports(&vps, &viewport);
-
-			ID3D11Texture2D* backbuffer = nullptr;
-			hr = pSwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&backbuffer);
-			if (FAILED(hr))
-			{
-				return;
-			}
-
-			hr = pDevice->CreateRenderTargetView(backbuffer, nullptr, &RenderTargetView);
-			backbuffer->Release();
-			if (FAILED(hr))
-			{
-				return;
-			}
-		}
-		else
-		{
-			pContext->OMSetRenderTargets(1, &RenderTargetView, nullptr);
-		}
-
-		ImGui_ImplDX11_NewFrame();
-		ImGui_ImplWin32_NewFrame();
-		ImGui::NewFrame();
-
-		Renderer::Get()->BeginScene();
-
-		DrawHooks::renderCallback(Renderer::Get());
-
-		Renderer::Get()->EndScene();
-
-		ImGui::EndFrame();
-		ImGui::Render();
-		ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
-	}
-
-#endif
-
-	void Steamoverlay::Hook(std::function<void(Renderer*)> drawCallback)
+	void Steamoverlay::Hook(renderapi api, std::function<void(Renderer*)> drawCallback)
 	{
 		DrawHooks::renderCallback  = drawCallback;
 
 		int8_t* hookAddress = nullptr;
 
 #ifdef _WIN64
-		//x64 d3d11 
-		hookAddress = Utility::Scan("GameOverlayRenderer64.dll", "48 89 6C 24 ? 48 89 74 24 ? 41 56 48 83 EC 20 41");
-		DrawHooks::oDirectX11SwapchainPresent = (DirectX11_IDXGISwapChain_Present)swapchainPresentHook.Hook(hookAddress, DrawHooks::GetPointerToHookedDirectX11SwapchainPresent());
+		switch (api)
+		{
+		case renderapi::opengl:
+			assert(false);
+			break;
+		case renderapi::directx9:
+			assert(false);
+			break;
+		case renderapi::directx11:
+			hookAddress = Utility::Scan("GameOverlayRenderer64.dll", "48 89 6C 24 ? 48 89 74 24 ? 41 56 48 83 EC 20 41");
+			DrawHooks::oDirectX11SwapchainPresent = (DirectX11_IDXGISwapChain_Present)steamoverlayHook.Hook(hookAddress, DrawHooks::GetPointerToHookedDirectX11SwapchainPresent());
+			break;
+		}
 #elif _WIN32
-		assert(false);
+		switch (api)
+		{
+		case renderapi::opengl:
+			assert(false);
+			break;
+		case renderapi::directx9:
+			hookAddress = Utility::Scan("GameOverlayRenderer.dll", "55 8B EC 83 EC 4C 53");
+			DrawHooks::originalDirect3DDevice9Present = (Direct3DDevice9_Present)steamoverlayHook.Hook(hookAddress, DrawHooks::GetPointerToHookedDirect3DDevice9Present());
+			break;
+		case renderapi::directx11:
+			assert(false);
+			break;
+		}
 #endif
 
 	
@@ -118,7 +57,7 @@ namespace imogui
 
 	void Steamoverlay::Unhook()
 	{
-		swapchainPresentHook.Unhook();
+		steamoverlayHook.Unhook();
 		InputHandler::UnhookWndProc();
 	}
 

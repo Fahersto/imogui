@@ -7,7 +7,7 @@
 
 namespace imogui
 {
-	enum overlay
+	enum class overlay
 	{
 		steam,
 		origin,
@@ -18,7 +18,7 @@ namespace imogui
 		discord
 	};
 
-	enum renderapi
+	enum class renderapi
 	{
 		opengl,
 		directx9,

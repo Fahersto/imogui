@@ -5,7 +5,7 @@
 namespace imogui
 {
 	using OpenGL_SwapBuffers = int64_t(*)(HDC a2);
-	using Direct3DDevice9_Present = int(__stdcall*)(IDirect3DDevice9*, __int64 a2, __int64 a3, __int64 a4, __int64 a5);
+	using Direct3DDevice9_Present = int(__stdcall*)(IDirect3DDevice9*, const RECT*, const RECT*, HWND, const RGNDATA*);
 	using DirectX11_IDXGISwapChain_Present = int64_t(*)(IDXGISwapChain*, int64_t a2, int64_t a3);
 	
 

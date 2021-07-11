@@ -49,7 +49,7 @@ namespace imogui
 		return DrawHooks::originalOpenGLSwapBuffers(hdc);
 	}
 
-	int64_t __stdcall hkD3D9Present(IDirect3DDevice9* device, __int64 a2, __int64 a3, __int64 a4, __int64 a5)
+	int64_t __stdcall hkD3D9Present(IDirect3DDevice9* device, const RECT* src, const RECT* dest, HWND wnd_override, const RGNDATA* dirty_region)
 	{
 		static bool firstTime = true;
 		if (firstTime)
@@ -64,6 +64,7 @@ namespace imogui
 
 			device->GetCreationParameters(&creationParameters);
 
+			InputHandler::HookWndProc(creationParameters.hFocusWindow);
 
 			ImGui_ImplWin32_Init(creationParameters.hFocusWindow);
 			ImGui_ImplDX9_Init(device);
@@ -83,7 +84,7 @@ namespace imogui
 		ImGui::Render();
 		ImGui_ImplDX9_RenderDrawData(ImGui::GetDrawData());
 
-		return DrawHooks::originalDirect3DDevice9Present(device, a2, a3, a4, a5);
+		return DrawHooks::originalDirect3DDevice9Present(device, src, dest, wnd_override, dirty_region);
 	}
 
 	HRESULT __stdcall hookD3D11Present(IDXGISwapChain* pSwapChain, UINT SyncInterval, UINT Flags)
@@ -164,7 +165,7 @@ namespace imogui
 
 	int8_t* DrawHooks::GetPointerToHookedDirect3DDevice9Present()
 	{
-		return nullptr;
+		return (int8_t*)hkD3D9Present;
 	}
 
 	int8_t* DrawHooks::GetPointerToHookedDirectX11SwapchainPresent()
