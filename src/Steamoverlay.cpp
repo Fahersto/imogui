@@ -4,7 +4,6 @@
 #include "Utility.h"
 #include "Renderer.h"
 #include "Detour.h"
-#include "MidfunctionHook.h"
 #include "InputHandler.h"
 
 
@@ -12,9 +11,12 @@
 #include "imgui/imgui_impl_win32.h"
 #include "imgui/imgui_impl_dx11.h"
 
+#include "MidfunctionHook.h"
+
 namespace imogui
 {
 	hookftw::Detour steamoverlayHook;
+	hookftw::MidfunctionHook steamoverlaMidfunctionHook;
 
 	void Steamoverlay::Hook(renderapi api, std::function<void(Renderer*)> drawCallback)
 	{

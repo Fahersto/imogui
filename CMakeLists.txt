@@ -28,5 +28,41 @@ target_link_libraries(imogui imgui)
 
 target_link_libraries(imogui d3d11)
 
+
+
+#build examples
+if("${CMAKE_SIZEOF_VOID_P}" STREQUAL "4")
+	add_library(steam_d3d9 SHARED src/examples/steam_d3d9.cpp)
+	target_link_libraries(steam_d3d9 imgui)
+	target_link_libraries(steam_d3d9 imogui)
+
+	add_library(discord_d3d9 SHARED src/examples/discord_d3d9.cpp)
+	target_link_libraries(discord_d3d9 imgui)
+	target_link_libraries(discord_d3d9 imogui)
+endif()
+
+if("${CMAKE_SIZEOF_VOID_P}" STREQUAL "8")
+	add_library(steam_d3d11 SHARED src/examples/steam_d3d11.cpp)
+	target_link_libraries(steam_d3d11 imgui)
+	target_link_libraries(steam_d3d11 imogui)
+
+	add_library(discord_d3d11 SHARED src/examples/discord_d3d11.cpp)
+	target_link_libraries(discord_d3d11 imgui)
+	target_link_libraries(discord_d3d11 imogui)
+
+	add_library(msiafterburner_d3d11 SHARED src/examples/msiafterburner_d3d11.cpp)
+	target_link_libraries(msiafterburner_d3d11 imgui)
+	target_link_libraries(msiafterburner_d3d11 imogui)
+
+	# not working
+	#add_library(originoverlay_d3d11 SHARED src/examples/originoverlay_d3d11.cpp)
+	#target_link_libraries(originoverlay_d3d11 imgui)
+	#target_link_libraries(originoverlay_d3d11 imogui)
+
+	add_library(overwolfoverlay_d3d11 SHARED src/examples/overwolfoverlay_d3d11.cpp)
+	target_link_libraries(overwolfoverlay_d3d11 imgui)
+	target_link_libraries(overwolfoverlay_d3d11 imogui)
+endif()
+
 # Link our project executable against Zydis.
 target_compile_features(imogui PRIVATE cxx_std_17)

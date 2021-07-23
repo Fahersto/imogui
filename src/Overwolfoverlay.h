@@ -4,7 +4,7 @@
 
 namespace imogui
 {
-	class Openbroadcasteroverlay
+	class Overwolfoverlay
 	{
 
 	public:

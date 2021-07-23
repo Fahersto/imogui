@@ -9,13 +9,12 @@
 
 #include "InputHandler.h"
 
+#include "MidfunctionHook.h"
+
 
 namespace imogui
 {
 	std::function<void(Renderer*)> DrawHooks::renderCallback = nullptr;
-
-	// original opengl swapbuffers function
-	OpenGL_SwapBuffers DrawHooks::originalOpenGLSwapBuffers = nullptr;
 
 	Direct3DDevice9_Present DrawHooks::originalDirect3DDevice9Present = nullptr;
 
@@ -32,21 +31,6 @@ namespace imogui
 		UINT vps = 1;
 		D3D11_VIEWPORT viewport;
 		HRESULT hr;
-	}
-
-	int64_t HkHwglSwapBuffers(HDC hdc)
-	{
-		static bool firstTime = true;
-		if (firstTime)
-		{
-			firstTime = false;
-
-		}
-
-		DrawHooks::renderCallback(Renderer::Get());
-
-
-		return DrawHooks::originalOpenGLSwapBuffers(hdc);
 	}
 
 	int64_t __stdcall hkD3D9Present(IDirect3DDevice9* device, const RECT* src, const RECT* dest, HWND wnd_override, const RGNDATA* dirty_region)
@@ -168,11 +152,80 @@ namespace imogui
 	}
 
 
-	int8_t* DrawHooks::GetPointerToHookedSwapBuffers()
+	void __fastcall hookD3D11MidfunctionProxy(hookftw::context* ctx)
 	{
-		assert(false);
-		return nullptr;
+		IDXGISwapChain* pSwapChain = (IDXGISwapChain*)ctx->r14;
+
+		static bool firstTime = true;
+		if (firstTime)
+		{
+			firstTime = false;
+
+			if (SUCCEEDED(pSwapChain->GetDevice(__uuidof(ID3D11Device), (void**)&pDevice)))
+			{
+				pSwapChain->GetDevice(__uuidof(pDevice), (void**)&pDevice);
+				pDevice->GetImmediateContext(&pContext);
+			}
+
+			//imgui
+			DXGI_SWAP_CHAIN_DESC sd;
+			pSwapChain->GetDesc(&sd);
+			ImGui::CreateContext();
+			ImGuiIO& io = ImGui::GetIO(); (void)io;
+			ImGui::GetIO().WantCaptureMouse || ImGui::GetIO().WantTextInput || ImGui::GetIO().WantCaptureKeyboard; //control menu with mouse
+			io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;  // Enable Keyboard Controls
+
+			RECT rect;
+			GetWindowRect(sd.OutputWindow, &rect);
+			Renderer::Get()->SetWidth(rect.right);
+			Renderer::Get()->SetHeight(rect.bottom);
+
+			InputHandler::HookWndProc(sd.OutputWindow);
+
+			ImGui_ImplWin32_Init(sd.OutputWindow);
+
+			ImGui_ImplDX11_Init(pDevice, pContext);
+			ImGui::GetIO().ImeWindowHandle = sd.OutputWindow;
+		}
+
+		if (RenderTargetView == nullptr)
+		{
+			pContext->RSGetViewports(&vps, &viewport);
+
+			ID3D11Texture2D* backbuffer = nullptr;
+			hr = pSwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&backbuffer);
+			if (FAILED(hr))
+			{
+				return;
+			}
+
+			hr = pDevice->CreateRenderTargetView(backbuffer, nullptr, &RenderTargetView);
+			backbuffer->Release();
+			if (FAILED(hr))
+			{
+				return;
+			}
+		}
+		else
+		{
+			pContext->OMSetRenderTargets(1, &RenderTargetView, nullptr);
+		}
+
+		ImGui_ImplDX11_NewFrame();
+		ImGui_ImplWin32_NewFrame();
+		ImGui::NewFrame();
+
+		Renderer::Get()->BeginScene();
+
+		DrawHooks::renderCallback(Renderer::Get());
+
+		Renderer::Get()->EndScene();
+
+		ImGui::EndFrame();
+		ImGui::Render();
+		ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
 	}
+
 
 	int8_t* DrawHooks::GetPointerToHookedDirect3DDevice9Present()
 	{
@@ -183,4 +236,5 @@ namespace imogui
 	{
 		return (int8_t*)hookD3D11Present;
 	}
+
 }
