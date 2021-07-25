@@ -151,6 +151,82 @@ namespace imogui
 		return DrawHooks::oDirectX11SwapchainPresent(pSwapChain, SyncInterval, Flags);
 	}
 
+
+	void __fastcall hookD3D11MidfunctionProxy(hookftw::context* ctx)
+	{
+		IDXGISwapChain* pSwapChain = (IDXGISwapChain*)ctx->r14;
+
+		static bool firstTime = true;
+		if (firstTime)
+		{
+			firstTime = false;
+
+			if (SUCCEEDED(pSwapChain->GetDevice(__uuidof(ID3D11Device), (void**)&pDevice)))
+			{
+				pSwapChain->GetDevice(__uuidof(pDevice), (void**)&pDevice);
+				pDevice->GetImmediateContext(&pContext);
+			}
+
+			//imgui
+			DXGI_SWAP_CHAIN_DESC sd;
+			pSwapChain->GetDesc(&sd);
+			ImGui::CreateContext();
+			ImGuiIO& io = ImGui::GetIO(); (void)io;
+			ImGui::GetIO().WantCaptureMouse || ImGui::GetIO().WantTextInput || ImGui::GetIO().WantCaptureKeyboard; //control menu with mouse
+			io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;  // Enable Keyboard Controls
+
+			RECT rect;
+			GetWindowRect(sd.OutputWindow, &rect);
+			Renderer::Get()->SetWidth(rect.right);
+			Renderer::Get()->SetHeight(rect.bottom);
+
+			InputHandler::HookWndProc(sd.OutputWindow);
+
+			ImGui_ImplWin32_Init(sd.OutputWindow);
+
+			ImGui_ImplDX11_Init(pDevice, pContext);
+			ImGui::GetIO().ImeWindowHandle = sd.OutputWindow;
+		}
+
+		if (RenderTargetView == nullptr)
+		{
+			pContext->RSGetViewports(&vps, &viewport);
+
+			ID3D11Texture2D* backbuffer = nullptr;
+			hr = pSwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&backbuffer);
+			if (FAILED(hr))
+			{
+				return;
+			}
+
+			hr = pDevice->CreateRenderTargetView(backbuffer, nullptr, &RenderTargetView);
+			backbuffer->Release();
+			if (FAILED(hr))
+			{
+				return;
+			}
+		}
+		else
+		{
+			pContext->OMSetRenderTargets(1, &RenderTargetView, nullptr);
+		}
+
+		ImGui_ImplDX11_NewFrame();
+		ImGui_ImplWin32_NewFrame();
+		ImGui::NewFrame();
+
+		Renderer::Get()->BeginScene();
+
+		DrawHooks::renderCallback(Renderer::Get());
+
+		Renderer::Get()->EndScene();
+
+		ImGui::EndFrame();
+		ImGui::Render();
+		ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
+	}
+
+
 	int8_t* DrawHooks::GetPointerToHookedDirect3DDevice9Present()
 	{
 		return (int8_t*)hkD3D9Present;
