@@ -1,9 +1,12 @@
 # imogui - draw on overlays using imgui
-A GUI library to draw on existing overlays using imgui (https://github.com/ocornut/imgui).
+A GUI library which hooks existing overlays to draw on them using imgui (https://github.com/ocornut/imgui). The project includes hookFTW (a hooking library) as a submodule which in turn includes zydis (a disassembler) as a submodule.
 
-## How to install
-Clone including submodules (hookFTW).
-
+## Usage
+1. Clone including submodules:
+```
+git clone --recursive git@github.com:Fahersto/imogui.git
+```
+2. Build the library using CMAKE.
 
 ## Currently supported overlays
 ### 32 Bit
