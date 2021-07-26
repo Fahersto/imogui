@@ -17,22 +17,24 @@ Example implementations are provided in src/Examples.
 
 ## Currently supported overlays
 ### 32 Bit
-Overlay | 				OpenGL    |	 DirectX 9 					| DirectX 11 				| DirectX 12
---------| 				--------  | ---------- 					| -------------				| -------------
-Steam   				| 	 :x:    |		:heavy_check_mark:	|		:x:		 			|		:x:		 
-Discord   				| 	 :x:    |		:heavy_check_mark:	|		:x:		 			|		:x:		
-Origin   				| 	 :x:    |		:x:	  				|		:x:		 			|		:x:		 
-MSI Afterburner   | 	 :x:    |		:x:	   				|		:x:		 			|		:x:		 
-Overwolf   				| 	 :x:    |		:x:	   				|		:x:		 			|		:x:		 
+Overlay | 				OpenGL		|	 DirectX 9 					| DirectX 11 				| DirectX 12
+--------| 				--------	| ---------- 					| -------------				| -------------
+Steam   				| 	 :x:    |		:heavy_check_mark:		|		:x:		 			|		:x:		 
+Discord   				| 	 :x:    |		:heavy_check_mark:		|		:x:		 			|		:x:		
+Origin   				| 	 :x:    |		:x:	  					|		:x:		 			|		:x:		 
+MSI Afterburner			| 	 :x:    |		:x:	   					|		:x:		 			|		:x:		 
+Overwolf   				| 	 :x:    |		:x:	   					|		:x:		 			|		:x:		 
+GeForce Experience		| 	 :x:    |		:x:	   					|		:x:		 			|		:x:		
 
 ### 64 Bit
-Overlay | 				OpenGL    |	 DirectX 9 					| DirectX 11				| DirectX 12
---------| 				--------  | ---------- 					| -------------				| -------------
-Steam   				| 	 :x:    |		:x:	   |				:heavy_check_mark:		|		:x:			 
-Discord   				| 	 :x:    |		:x:	   |				:heavy_check_mark:		|		:x:	
-Origin   				| 	 :x:    |		:x:	   |				:heavy_check_mark:		|		:x:			 
-MSI Afterburner   | 	 :x:    |		:x:	   |				:heavy_check_mark:		|		:x:			 	 
-Overwolf   				| 	 :x:    |		:x:	   |				:x:						|		:x:		
+Overlay | 				OpenGL		|	 DirectX 9 					| DirectX 11				| DirectX 12
+--------| 				--------	| ---------- 					| -------------				| -------------
+Steam   				| 	 :x:    |		:x:	   |				:heavy_check_mark:			|		:x:			 
+Discord   				| 	 :x:    |		:x:	   |				:heavy_check_mark:			|		:x:	
+Origin   				| 	 :x:    |		:x:	   |				:heavy_check_mark:			|		:x:			 
+MSI Afterburner			| 	 :x:    |		:x:	   |				:heavy_check_mark:			|		:x:			 	 
+Overwolf   				| 	 :x:    |		:x:	   |				:x:							|		:x:		
+GeForce Experience		| 	 :x:    |		:x:	   |				:x:		 					|		:x:		
 
 ## Roadmap
 - Add support for OpenGL
