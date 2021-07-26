@@ -1,5 +1,5 @@
 # imogui - draw on overlays using imgui
-A GUI library that draws on hooked overlays using imgui (https://github.com/ocornut/imgui).
+A GUI library to draw on existing overlays using imgui (https://github.com/ocornut/imgui).
 
 # How to install
 Clone including submodules (hookFTW).
@@ -10,20 +10,21 @@ Clone including submodules (hookFTW).
 Overlay | 				OpenGL    |	 DirectX 9 					| DirectX 11 				| DirectX 12
 --------| 				--------  | ---------- 					| -------------				| -------------
 Steam   				| 	 :x:    |		:heavy_check_mark:	|		:x:		 			|		:x:		 
-Discord   				| 	 :x:    |		:heavy_check_mark:	|		:x:		 			|		:x:		 
-Msiafterburneroverlay   | 	 :x:    |		:x:	   				|		:x:		 			|		:x:		 
+Discord   				| 	 :x:    |		:heavy_check_mark:	|		:x:		 			|		:x:		
 Origin   				| 	 :x:    |		:x:	  				|		:x:		 			|		:x:		 
+MSI Afterburner   | 	 :x:    |		:x:	   				|		:x:		 			|		:x:		 
 Overwolf   				| 	 :x:    |		:x:	   				|		:x:		 			|		:x:		 
 
 ## 64 Bit
-Overlay | 				OpenGL    |	 DirectX 9 					| DirectX 11
---------| 				--------  | ---------- 					| -------------
+Overlay | 				OpenGL    |	 DirectX 9 					| DirectX 11				| DirectX 12
+--------| 				--------  | ---------- 					| -------------				| -------------
 Steam   				| 	 :x:    |			   |				:heavy_check_mark:		|		:x:			 
-Discord   				| 	 :x:    |		:x:	   |				:heavy_check_mark:		|		:x:			 
-Msiafterburneroverlay   | 	 :x:    |		:x:	   |				:heavy_check_mark:		|		:x:			 
+Discord   				| 	 :x:    |		:x:	   |				:heavy_check_mark:		|		:x:	
 Origin   				| 	 :x:    |		:x:	   |				:heavy_check_mark:		|		:x:			 
+MSI Afterburner   | 	 :x:    |		:x:	   |				:heavy_check_mark:		|		:x:			 	 
 Overwolf   				| 	 :x:    |		:x:	   |				:x:						|		:x:		
 
 # Roadmap
 - Add support for OpenGL
 - Add support for DirectX 12
+- Add more overlays
