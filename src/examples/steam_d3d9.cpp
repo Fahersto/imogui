@@ -30,10 +30,10 @@ bouncyball bouncyballs[bouncyBallCount];
 /**
 *	Draw anything using Renderer and IMGUI
 */
-void OnDraw(imogui::Renderer* renderer)
+void OnDraw(imogui::Renderer& renderer)
 {
-	int width = renderer->GetWidth();
-	int height = renderer->GetHeight();
+	const int width = renderer.GetWidth();
+	const int height = renderer.GetHeight();
 
 	static ImU32 bouncyballColor = 0xc000ffaa;
 	static float color[3] = { 0.3f, 0, 0.9f };
@@ -60,7 +60,7 @@ void OnDraw(imogui::Renderer* renderer)
 			bouncyballs[i].velocity.y = abs(bouncyballs[i].velocity.y) * -1;
 		}
 
-		renderer->RenderCircle(bouncyballs[i].pos, bouncyballs[i].radius, bouncyballColor, i % 8, 32);
+		renderer.RenderCircle(bouncyballs[i].pos, bouncyballs[i].radius, bouncyballColor, i % 8, 32);
 	}
 
 	ImGui::SetNextWindowBgAlpha(0.8f);
@@ -80,7 +80,7 @@ void OnDraw(imogui::Renderer* renderer)
 DWORD __stdcall Initialise(LPVOID hModule)
 {
 	imogui::Steamoverlay overlay;
-	overlay.Hook(imogui::renderapi::directx9, OnDraw);
+	overlay.Hook(imogui::renderapi::DIRECTX9, OnDraw);
 
 	while (true)
 	{

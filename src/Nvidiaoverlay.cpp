@@ -10,7 +10,7 @@ namespace imogui
 {
 	hookftw::Detour swapchainPresentHook;
 
-	void Nvidiaoverlay::Hook(renderapi api, std::function<void(Renderer*)> drawCallback)
+	void Nvidiaoverlay::Hook(renderapi api, std::function<void(Renderer&)> drawCallback)
 	{
 		DrawHooks::renderCallback = drawCallback;
 		//x64 d3d11 
