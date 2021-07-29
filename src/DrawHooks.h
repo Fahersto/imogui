@@ -6,6 +6,7 @@
 
 namespace imogui
 {
+	using OpenGl_SwapBuffers = bool(__stdcall*)(HDC hdc, UINT unnamed);
 	using Direct3DDevice9_Present = int(__stdcall*)(IDirect3DDevice9*, const RECT*, const RECT*, HWND, const RGNDATA*);
 	using DirectX11_IDXGISwapChain_Present = int64_t(*)(IDXGISwapChain*, int64_t a2, int64_t a3);
 	using DirectX11_MidfunctionHook = void(__fastcall*) (hookftw::context* ctx);
@@ -15,8 +16,12 @@ namespace imogui
 	{
 
 	public:
-		static std::function<void(Renderer*)> renderCallback;
+		static std::function<void(Renderer&)> renderCallback;
 		
+		// opengl
+		//static OpenGl_SwapBuffers originalOpenGlSwapBuffers;
+		//static int8_t* GetPointerToHookedOPenGlSwapBuffers();
+
 		// directX9
 		static Direct3DDevice9_Present originalDirect3DDevice9Present;
 		static int8_t* GetPointerToHookedDirect3DDevice9Present();
