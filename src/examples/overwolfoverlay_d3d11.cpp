@@ -79,7 +79,7 @@ void OnDraw(imogui::Renderer& renderer)
 DWORD __stdcall Initialise(LPVOID hModule)
 {
 	imogui::Overwolfoverlay overlay;
-	overlay.Hook(imogui::renderapi::DIRECTX11, OnDraw);
+	overlay.Hook(imogui::Renderapi::DIRECTX11, OnDraw);
 
 	while (true)
 	{

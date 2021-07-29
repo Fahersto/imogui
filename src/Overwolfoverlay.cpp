@@ -10,20 +10,20 @@ namespace imogui
 {
 	hookftw::Detour swapchainPresentHook;
 
-	void Overwolfoverlay::Hook(renderapi api, std::function<void(Renderer&)> drawCallback)
+	void Overwolfoverlay::Hook(Renderapi api, std::function<void(Renderer&)> drawCallback)
 	{
 		DrawHooks::renderCallback = drawCallback;
 
 #ifdef _WIN64
 		switch (api)
 		{
-		case renderapi::OPENGL:
+		case Renderapi::OPENGL:
 			assert(false);
 			break;
-		case renderapi::DIRECTX9:
+		case Renderapi::DIRECTX9:
 			assert(false);
 			break;
-		case renderapi::DIRECTX11:
+		case Renderapi::DIRECTX11:
 			assert(false);
 			//not working
 			int8_t* hookAddress = Utility::Scan("dxgi.dll", "48 89 5C 24 ? 48 89 74 24 ? 55 57 41 56 48 8D 6C 24 ? 48 81 EC ? ? ? ? 48 8B 05 ? ? ? ? 48 33 C4 48 89 45 60");
@@ -32,13 +32,13 @@ namespace imogui
 #elif _WIN32
 		switch (api)
 		{
-		case renderapi::OPENGL:
+		case Renderapi::OPENGL:
 			assert(false);
 			break;
-		case renderapi::DIRECTX9:
+		case Renderapi::DIRECTX9:
 			assert(false);
 			break;
-		case renderapi::DIRECTX11:
+		case Renderapi::DIRECTX11:
 			assert(false);
 			break;
 		}

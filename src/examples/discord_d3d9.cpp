@@ -79,7 +79,7 @@ void OnDraw(imogui::Renderer& renderer)
 DWORD __stdcall Initialise(LPVOID hModule)
 {
 	imogui::Discordoverlay overlay;
-	overlay.Hook(imogui::renderapi::DIRECTX9, OnDraw);
+	overlay.Hook(imogui::Renderapi::DIRECTX9, OnDraw);
 
 	while (true)
 	{

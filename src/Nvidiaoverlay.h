@@ -11,7 +11,7 @@ namespace imogui
 		/**
 		* Inject into "NVIDIA Share.exe".
 		*/
-		void Hook(renderapi api, std::function<void(Renderer&)> drawCallback);
+		void Hook(Renderapi api, std::function<void(Renderer&)> drawCallback);
 		void Unhook();
 	};
 }
