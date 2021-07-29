@@ -12,14 +12,19 @@ namespace imogui
 			auto start = const_cast<char*>(pattern);
 			auto end = const_cast<char*>(pattern) + strlen(pattern);
 
-			for (auto current = start; current < end; ++current) {
-				if (*current == '?') {
+			for (auto current = start; current < end; ++current) 
+			{
+				if (*current == '?')
+				{
 					++current;
 					if (*current == '?')
+					{
 						++current;
+					}
 					bytes.push_back(-1);
 				}
-				else {
+				else 
+				{
 					bytes.push_back(strtoul(current, &current, 16));
 				}
 			}
@@ -37,15 +42,12 @@ namespace imogui
 		auto s = patternBytes.size();
 		auto d = patternBytes.data();
 
-		for (auto i = 0ul; i < sizeOfImage - s; ++i) {
+		for (auto i = 0ul; i < sizeOfImage - s; ++i) 
+		{
 			bool found = true;
 
-			if (i == 0x890E0)
+			for (auto j = 0ul; j < s; ++j) 
 			{
-				printf("Test\n");
-			}
-
-			for (auto j = 0ul; j < s; ++j) {
 				int8_t currentByte = scanBytes[i + j];
 				int8_t currentByteInPattern = d[j];
 
