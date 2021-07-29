@@ -7,22 +7,22 @@
 
 namespace imogui
 {
-	enum class overlay
+	enum class Overlay
 	{
-		steam,
-		origin,
-		overwolf,
-		openbroadcast,
-		nvidiashare,
-		msiafterburner,
-		discord
+		STEAM,
+		ORIGIN,
+		OVERWOLF,
+		OPENBROADCAST,
+		NVIDIASHARE,
+		MSIAFTERBURNER,
+		DISCORD
 	};
 
-	enum class renderapi
+	enum class Renderapi
 	{
-		opengl,
-		directx9,
-		directx11
+		OPENGL,
+		DIRECTX9,
+		DIRECTX11
 	};
 
 	class Renderer
@@ -37,7 +37,7 @@ namespace imogui
 		~Renderer();
 
 	public:
-		static Renderer* Get();
+		static Renderer& Get();
 
 		bool inFrame;
 
@@ -50,7 +50,7 @@ namespace imogui
 		void BeginScene();
 		void EndScene();
 
-		void RenderText(const std::string& text, const ImVec2& position, float size, uint32_t color, bool center = false);
+		void RenderText(const std::string& text, const ImVec2& position, float size, uint32_t color);
 		void RenderLine(const ImVec2& from, const ImVec2& to, uint32_t color, float thickness = 1.0f);
 		void RenderPolygon(const ImVec2* points, int pointCount, uint32_t color, float thickness = 1.0f);
 		void RenderCircle(const ImVec2& position, float radius, uint32_t color, float thickness = 1.0f, uint32_t segments = 16);

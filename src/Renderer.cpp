@@ -18,13 +18,13 @@ namespace imogui
 
 	}
 
-	Renderer* Renderer::Get()
+	Renderer& Renderer::Get()
 	{
 		if (!_instance)
 		{
 			_instance = new Renderer();
 		}
-		return _instance;
+		return *_instance;
 	}
 
 	int Renderer::GetWidth()
@@ -70,7 +70,7 @@ namespace imogui
 		inFrame = false;
 	}
 
-	void Renderer::RenderText(const std::string& text, const ImVec2& position, float size, uint32_t color, bool center)
+	void Renderer::RenderText(const std::string& text, const ImVec2& position, float size, uint32_t color)
 	{
 		ImGuiWindow* window = ImGui::GetCurrentWindow();
 
@@ -79,14 +79,7 @@ namespace imogui
 		float g = (color >> 8) & 0xff;
 		float b = (color) & 0xff;
 
-		if (center)
-		{
-			window->DrawList->AddText(NULL, size, position, ImGui::GetColorU32({ r, g, b, a }), text.c_str());
-		}
-		else
-		{
-			window->DrawList->AddText(NULL, size, position, ImGui::GetColorU32({ r,g,b,a }), text.c_str());
-		}
+		window->DrawList->AddText(NULL, size, position, ImGui::GetColorU32({ r,g,b,a }), text.c_str());
 	}
 
 	void Renderer::RenderLine(const ImVec2& from, const ImVec2& to, uint32_t color, float thickness)
