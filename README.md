@@ -25,6 +25,7 @@ Origin   				| 	 :x:    |		:x:	  					|		:x:		 			|		:x:
 MSI Afterburner			| 	 :x:    |		:x:	   					|		:x:		 			|		:x:		 
 Overwolf   				| 	 :x:    |		:x:	   					|		:x:		 			|		:x:		 
 GeForce Experience		| 	 :x:    |		:x:	   					|		:x:		 			|		:x:		
+OBS						| 	 :x:    |		:heavy_check_mark:	   					|		:heavy_check_mark:		 			|		:x:		
 
 ### 64 Bit
 Overlay | 				OpenGL		|	 DirectX 9 					| DirectX 11				| DirectX 12
@@ -35,6 +36,7 @@ Origin   				| 	 :x:    |		:x:	   |				:heavy_check_mark:			|		:x:
 MSI Afterburner			| 	 :x:    |		:x:	   |				:heavy_check_mark:			|		:x:			 	 
 Overwolf   				| 	 :x:    |		:x:	   |				:x:							|		:x:		
 GeForce Experience		| 	 :x:    |		:x:	   |				:x:		 					|		:x:		
+OBS						| 	 :x:    |		:heavy_check_mark:	   					|		:heavy_check_mark:		 			|		:x:		
 
 ## Roadmap
 - Add support for OpenGL
