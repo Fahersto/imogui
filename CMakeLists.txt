@@ -39,6 +39,10 @@ if("${CMAKE_SIZEOF_VOID_P}" STREQUAL "4")
 	add_library(discord_d3d9 SHARED src/examples/discord_d3d9.cpp)
 	target_link_libraries(discord_d3d9 imgui)
 	target_link_libraries(discord_d3d9 imogui)
+
+	add_library(obsoverlay_d3d9 SHARED src/examples/obsoverlay_d3d9.cpp)
+	target_link_libraries(obsoverlay_d3d9 imgui)
+	target_link_libraries(obsoverlay_d3d9 imogui)
 endif()
 
 if("${CMAKE_SIZEOF_VOID_P}" STREQUAL "8")
@@ -58,6 +62,10 @@ if("${CMAKE_SIZEOF_VOID_P}" STREQUAL "8")
 	#add_library(originoverlay_d3d11 SHARED src/examples/originoverlay_d3d11.cpp)
 	#target_link_libraries(originoverlay_d3d11 imgui)
 	#target_link_libraries(originoverlay_d3d11 imogui)
+
+	add_library(obsoverlay_d3d11 SHARED src/examples/obsoverlay_d3d11.cpp)
+	target_link_libraries(obsoverlay_d3d11 imgui)
+	target_link_libraries(obsoverlay_d3d11 imogui)
 
 	add_library(overwolfoverlay_d3d11 SHARED src/examples/overwolfoverlay_d3d11.cpp)
 	target_link_libraries(overwolfoverlay_d3d11 imgui)
