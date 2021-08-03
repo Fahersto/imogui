@@ -29,6 +29,8 @@ namespace imogui
 		{
 		case Renderapi::OPENGL:
 			assert(false);
+			//hookAddress = Utility::Scan("GameOverlayRenderer64.dll", "40 53 48 83 EC 30 48 8B D9 48 8D");
+			//DrawHooks::originalOpenGlSwapBuffers = (OpenGl_SwapBuffers)steamoverlayHook.Hook(hookAddress, DrawHooks::GetPointerToHookedOPenGlSwapBuffers());
 			break;
 		case Renderapi::DIRECTX9:
 			assert(false);
@@ -45,13 +47,13 @@ namespace imogui
 			assert(false);
 			/*
 			steamoverlaMidfunctionHook.Hook(
-				Utility::Scan("GameOverlayRenderer.dll", "89 3D ? ? ? ? E8 ? ? ? ? "), 
+				Utility::Scan("GameOverlayRenderer.dll", "89 3D ? ? ? ? E8"), 
 				[](hookftw::context* ctx)
 				{
 					OpenGl_SwapBuffers tmp = (OpenGl_SwapBuffers)DrawHooks::GetPointerToHookedOPenGlSwapBuffers;
 					tmp((HDC)ctx->edi, 1);
 				});
-			*/
+				*/
 			break;
 		case Renderapi::DIRECTX9:
 			hookAddress = Utility::Scan("GameOverlayRenderer.dll", "55 8B EC 83 EC 4C 53");
