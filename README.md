@@ -4,7 +4,7 @@ A GUI library which hooks existing overlays to draw on them using imgui (https:/
 ## Setting up
 1. Clone including submodules:
 ```
-git clone --recursive git@github.com:Fahersto/imogui.git
+git clone --recursive https://github.com/Fahersto/imogui.git
 ```
 2. Build the library using CMAKE.
 
