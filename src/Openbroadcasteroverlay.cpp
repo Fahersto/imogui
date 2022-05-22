@@ -161,7 +161,7 @@ namespace imogui
 			//DrawHooks::originalDirect3DDevice9Present = (Direct3DDevice9_Present)obsOverlayHook.Hook(hookAddress, DrawHooks::GetPointerToHookedDirect3DDevice9Present());
 			break;
 		case Renderapi::DIRECTX11:
-			hookAddress = Utility::Scan("graphics-hook64.dll", "48 8D 0D ? ? ? ? 48 03 DA C6 03 01 E8 ? ? ? ? 44 8B C6");
+			hookAddress = Utility::Scan("graphics-hook64.dll", "44 8B C6 65 48 8B 04 25 ? ? ? ? BA ? ? ? ? 48 8B 1C C8 48 8B CF");
 			
 			midFunction.Hook(hookAddress, 
 				[](hookftw::context* ctx) {
