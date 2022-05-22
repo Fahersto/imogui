@@ -61,6 +61,10 @@ if("${CMAKE_SIZEOF_VOID_P}" STREQUAL "8")
 	#target_link_libraries(originoverlay_d3d11 imgui)
 	#target_link_libraries(originoverlay_d3d11 imogui)
 
+	add_library(obsoverlay_opengl SHARED src/examples/obsoverlay_opengl.cpp)
+	target_link_libraries(obsoverlay_opengl imgui)
+	target_link_libraries(obsoverlay_opengl imogui)
+
 	add_library(obsoverlay_d3d11 SHARED src/examples/obsoverlay_d3d11.cpp)
 	target_link_libraries(obsoverlay_d3d11 imgui)
 	target_link_libraries(obsoverlay_d3d11 imogui)

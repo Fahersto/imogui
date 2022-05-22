@@ -11,6 +11,7 @@
 #include "imgui/imgui_impl_win32.h"
 #include "imgui/imgui_impl_dx9.h"
 #include "imgui/imgui_impl_dx11.h"
+#include "imgui/imgui_impl_opengl3.h"
 
 #include <Windows.h>
 
@@ -29,6 +30,47 @@ namespace imogui
 		UINT vps = 1;
 		D3D11_VIEWPORT viewport;
 		HRESULT hr;
+	}
+
+	// todo check if we pass hdc
+	void OpenGLSwapbuffersMidfunction(HDC hDc)
+	{
+		static bool firstTime = true;
+		if (firstTime)
+		{
+			firstTime = false;
+
+			ImGui::CreateContext();
+			ImGuiIO& io = ImGui::GetIO();
+			io.ConfigFlags = ImGuiConfigFlags_NoMouseCursorChange;
+
+			HWND hWnd = WindowFromDC(hDc);
+	
+			RECT rect;
+			GetClientRect(hWnd, &rect);
+			Renderer::Get().SetWidth(rect.right);
+			Renderer::Get().SetHeight(rect.bottom);
+
+
+			InputHandler::HookWndProc(hWnd);
+
+			ImGui_ImplWin32_Init(hWnd);
+			ImGui_ImplOpenGL3_Init();
+		}
+
+		ImGui_ImplOpenGL3_NewFrame();
+		ImGui_ImplWin32_NewFrame();
+		ImGui::NewFrame();
+
+		Renderer::Get().BeginScene();
+
+		DrawHooks::renderCallback(Renderer::Get());
+
+		Renderer::Get().EndScene();
+
+		ImGui::EndFrame();
+		ImGui::Render();
+		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 	}
 
 	void  D3D9PresentMidfunction(IDirect3DDevice9* device)
@@ -153,7 +195,14 @@ namespace imogui
 		switch (api)
 		{
 		case Renderapi::OPENGL:
-			assert(false);
+			hookAddress = Utility::Scan("graphics-hook64.dll", "48 8D 15 ?? ?? ?? ?? 48 89 1D ?? ?? ?? ?? 48 8D 0D");
+			hookAddress += *(int32_t*)(hookAddress + 3) + 7;
+
+			midFunction.Hook(hookAddress,
+				[](hookftw::context* ctx) {
+					OpenGLSwapbuffersMidfunction((HDC)ctx->rcx);
+				}
+			);
 			break;
 		case Renderapi::DIRECTX9:
 			assert(false);
