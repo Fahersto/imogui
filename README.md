@@ -20,7 +20,7 @@ Example implementations are provided in src/Examples.
 Overlay | 				OpenGL		|	 DirectX 9 					| DirectX 11 				| DirectX 12
 --------| 				--------	| ---------- 					| -------------				| -------------
 Steam   				| 	 :x:    |		:heavy_check_mark:		|		:x:		 			|		:x:		 
-Discord   				| 	 :x:    |		:heavy_check_mark:		|		:x:		 			|		:x:		
+Discord   				| 	 :heavy_check_mark:    |		:heavy_check_mark:		|		:x:		 			|		:x:		
 Origin   				| 	 :x:    |		:x:	  					|		:x:		 			|		:x:		 
 MSI Afterburner			| 	 :x:    |		:x:	   					|		:x:		 			|		:x:		 
 Overwolf   				| 	 :x:    |		:x:	   					|		:x:		 			|		:x:		 
@@ -31,7 +31,7 @@ OBS						| 	 :heavy_check_mark:    |		:heavy_check_mark:	   	|		:x:		 			|		:x:
 Overlay | 				OpenGL		|	 DirectX 9 					| DirectX 11				| DirectX 12
 --------| 				--------	| ---------- 					| -------------				| -------------
 Steam   				| 	 :x:    |		:x:	   |				:heavy_check_mark:			|		:x:			 
-Discord   				| 	 :x:    |		:x:	   |				:heavy_check_mark:			|		:x:	
+Discord   				| 	 :heavy_check_mark:    |		:x:	   |				:heavy_check_mark:			|		:x:	
 Origin   				| 	 :x:    |		:x:	   |				:heavy_check_mark:			|		:x:			 
 MSI Afterburner			| 	 :x:    |		:x:	   |				:heavy_check_mark:			|		:x:			 	 
 Overwolf   				| 	 :x:    |		:x:	   |				:x:							|		:x:		
@@ -39,6 +39,5 @@ GeForce Experience		| 	 :x:    |		:x:	   |				:x:		 					|		:x:
 OBS						| 	 :heavy_check_mark:    |		:x:	   |		:heavy_check_mark:		 			|		:x:		
 
 ## Roadmap
-- Add support for OpenGL
 - Add support for DirectX 12
 - Add more overlays

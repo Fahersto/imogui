@@ -64,7 +64,7 @@ void OnDraw(imogui::Renderer& renderer)
 
 	ImGui::SetNextWindowBgAlpha(0.8f);
 	static bool openOverlay = true;
-	if (ImGui::Begin("IMOGUI - Discordoverlay DirectX11 Hook", &openOverlay))
+	if (ImGui::Begin("IMOGUI - Discordoverlay OpenGL Hook", &openOverlay))
 	{
 		ImGui::Text("Intermediate Mode Overlay GUI");
 		ImGui::ColorPicker3("Bouncyball Color", color);
@@ -79,7 +79,7 @@ void OnDraw(imogui::Renderer& renderer)
 DWORD __stdcall Initialise(LPVOID hModule)
 {
 	imogui::Discordoverlay overlay;
-	overlay.Hook(imogui::Renderapi::DIRECTX11, OnDraw);
+	overlay.Hook(imogui::Renderapi::OPENGL, OnDraw);
 
 	while (true)
 	{
