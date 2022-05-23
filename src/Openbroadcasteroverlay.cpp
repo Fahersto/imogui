@@ -32,7 +32,6 @@ namespace imogui
 		HRESULT hr;
 	}
 
-	// todo check if we pass hdc
 	void OpenGLSwapbuffersMidfunction(HDC hDc)
 	{
 		static bool firstTime = true;
@@ -253,7 +252,6 @@ namespace imogui
 
 	void Openbroadcasteroverlay::Unhook()
 	{
-		//obsOverlayHook.Unhook();
 		midFunction.Unhook();
 		InputHandler::UnhookWndProc();
 	}
