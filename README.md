@@ -19,7 +19,7 @@ Example implementations are provided in src/Examples.
 ### 32 Bit
 Overlay | 				OpenGL		|	 DirectX 9 					| DirectX 11 				| DirectX 12
 --------| 				--------	| ---------- 					| -------------				| -------------
-Steam   				| 	 :x:    |		:heavy_check_mark:		|		:x:		 			|		:x:		 
+Steam   				| 	 :heavy_check_mark:    |		:heavy_check_mark:		|		:x:		 			|		:x:		 
 Discord   				| 	 :heavy_check_mark:    |		:heavy_check_mark:		|		:x:		 			|		:x:		
 Origin   				| 	 :x:    |		:x:	  					|		:x:		 			|		:x:		 
 MSI Afterburner			| 	 :x:    |		:x:	   					|		:x:		 			|		:x:		 
@@ -30,7 +30,7 @@ OBS						| 	 :heavy_check_mark:    |		:heavy_check_mark:	   	|		:x:		 			|		:x:
 ### 64 Bit
 Overlay | 				OpenGL		|	 DirectX 9 					| DirectX 11				| DirectX 12
 --------| 				--------	| ---------- 					| -------------				| -------------
-Steam   				| 	 :x:    |		:x:	   |				:heavy_check_mark:			|		:x:			 
+Steam   				| 	 :heavy_check_mark:    |		:x:	   |				:heavy_check_mark:			|		:x:			 
 Discord   				| 	 :heavy_check_mark:    |		:x:	   |				:heavy_check_mark:			|		:x:	
 Origin   				| 	 :x:    |		:x:	   |				:heavy_check_mark:			|		:x:			 
 MSI Afterburner			| 	 :x:    |		:x:	   |				:heavy_check_mark:			|		:x:			 	 

@@ -34,6 +34,10 @@ if("${CMAKE_SIZEOF_VOID_P}" STREQUAL "4")
 	target_link_libraries(steam_d3d9 imgui)
 	target_link_libraries(steam_d3d9 imogui)
 
+	add_library(steam_opengl SHARED src/examples/steam_opengl.cpp)
+	target_link_libraries(steam_opengl imgui)
+	target_link_libraries(steam_opengl imogui)
+
 	add_library(discord_d3d9 SHARED src/examples/discord_d3d9.cpp)
 	target_link_libraries(discord_d3d9 imgui)
 	target_link_libraries(discord_d3d9 imogui)
@@ -55,6 +59,10 @@ if("${CMAKE_SIZEOF_VOID_P}" STREQUAL "8")
 	add_library(steam_d3d11 SHARED src/examples/steam_d3d11.cpp)
 	target_link_libraries(steam_d3d11 imgui)
 	target_link_libraries(steam_d3d11 imogui)
+
+	add_library(steam_opengl SHARED src/examples/steam_opengl.cpp)
+	target_link_libraries(steam_opengl imgui)
+	target_link_libraries(steam_opengl imogui)
 
 	add_library(discord_d3d11 SHARED src/examples/discord_d3d11.cpp)
 	target_link_libraries(discord_d3d11 imgui)

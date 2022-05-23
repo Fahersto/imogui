@@ -9,7 +9,7 @@
 
 #include "imgui/imgui.h"
 #include "imgui/imgui_impl_win32.h"
-#include "imgui/imgui_impl_dx11.h"
+#include "imgui/imgui_impl_opengl3.h"
 
 #include "MidfunctionHook.h"
 
@@ -17,20 +17,66 @@ namespace imogui
 {
 	hookftw::Detour steamoverlayHook;
 	hookftw::MidfunctionHook steamoverlaMidfunctionHook;
+	bool usedMidfunctionHook = false;
+
+	void OpenGLSwapbuffersMidfunction(HDC hDc)
+	{
+		static bool firstTime = true;
+		if (firstTime)
+		{
+			firstTime = false;
+
+			ImGui::CreateContext();
+			ImGuiIO& io = ImGui::GetIO();
+			io.ConfigFlags = ImGuiConfigFlags_NoMouseCursorChange;
+
+			HWND hWnd = WindowFromDC(hDc);
+
+			RECT rect;
+			GetClientRect(hWnd, &rect);
+			Renderer::Get().SetWidth(rect.right);
+			Renderer::Get().SetHeight(rect.bottom);
+
+
+			InputHandler::HookWndProc(hWnd);
+
+			ImGui_ImplWin32_Init(hWnd);
+			ImGui_ImplOpenGL3_Init();
+		}
+
+		ImGui_ImplOpenGL3_NewFrame();
+		ImGui_ImplWin32_NewFrame();
+		ImGui::NewFrame();
+
+		Renderer::Get().BeginScene();
+
+		DrawHooks::renderCallback(Renderer::Get());
+
+		Renderer::Get().EndScene();
+
+		ImGui::EndFrame();
+		ImGui::Render();
+		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+	}
 
 	void Steamoverlay::Hook(Renderapi api, std::function<void(Renderer&)> drawCallback)
 	{
 		DrawHooks::renderCallback  = drawCallback;
-
 		int8_t* hookAddress = nullptr;
 
 #ifdef _WIN64
 		switch (api)
 		{
 		case Renderapi::OPENGL:
-			assert(false);
-			//hookAddress = Utility::Scan("GameOverlayRenderer64.dll", "40 53 48 83 EC 30 48 8B D9 48 8D");
-			//DrawHooks::originalOpenGlSwapBuffers = (OpenGl_SwapBuffers)steamoverlayHook.Hook(hookAddress, DrawHooks::GetPointerToHookedOPenGlSwapBuffers());
+			hookAddress = Utility::Scan("GameOverlayRenderer64.dll", "40 53 48 83 EC 30 48 8B D9 48 8D 54 24");
+			steamoverlaMidfunctionHook.Hook(
+				hookAddress,
+				[](hookftw::context* ctx)
+				{
+					OpenGLSwapbuffersMidfunction((HDC)ctx->rcx);
+				}
+			);
+			usedMidfunctionHook = true;
 			break;
 		case Renderapi::DIRECTX9:
 			assert(false);
@@ -44,16 +90,13 @@ namespace imogui
 		switch (api)
 		{
 		case Renderapi::OPENGL:
-			assert(false);
-			/*
 			steamoverlaMidfunctionHook.Hook(
-				Utility::Scan("GameOverlayRenderer.dll", "89 3D ? ? ? ? E8"), 
+				Utility::Scan("GameOverlayRenderer.dll", "55 8B EC 83 EC 10 8D 45 F0 50"), 
 				[](hookftw::context* ctx)
 				{
-					OpenGl_SwapBuffers tmp = (OpenGl_SwapBuffers)DrawHooks::GetPointerToHookedOPenGlSwapBuffers;
-					tmp((HDC)ctx->edi, 1);
+					OpenGLSwapbuffersMidfunction((HDC)*(int32_t*)(ctx->esp+4));
 				});
-				*/
+			usedMidfunctionHook = true;
 			break;
 		case Renderapi::DIRECTX9:
 			hookAddress = Utility::Scan("GameOverlayRenderer.dll", "55 8B EC 83 EC 4C 53");
@@ -70,7 +113,14 @@ namespace imogui
 
 	void Steamoverlay::Unhook()
 	{
-		steamoverlayHook.Unhook();
+		if (usedMidfunctionHook)
+		{
+			steamoverlaMidfunctionHook.Unhook();
+		}
+		else
+		{
+			steamoverlayHook.Unhook();
+		}
 		InputHandler::UnhookWndProc();
 	}
 
