@@ -72,7 +72,7 @@ namespace imogui
 		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 	}
 
-	void  D3D9PresentMidfunction(IDirect3DDevice9* device)
+	void D3D9PresentMidfunction(IDirect3DDevice9* device)
 	{
 		static bool firstTime = true;
 		if (firstTime)
