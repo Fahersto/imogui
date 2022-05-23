@@ -223,7 +223,15 @@ namespace imogui
 		switch (api)
 		{
 		case Renderapi::OPENGL:
-			assert(false);
+			hookAddress = Utility::Scan("graphics-hook32.dll", "68 ? ? ? ? 68 ? ? ? ? 89 35 ? ? ? ? E8 ? ? ? ? E8 ? ? ? ? 85 C0 0F 94 C3 85 C0 75 6F 68");
+			hookAddress = (int8_t*)(*(int32_t*)(hookAddress + 1));
+
+			midFunction.Hook(hookAddress,
+				[](hookftw::context* ctx) {
+					OpenGLSwapbuffersMidfunction((HDC)*(int32_t*)(ctx->esp + 4));
+				}
+			);
+
 			break;
 		case Renderapi::DIRECTX9:
 			hookAddress = Utility::Scan("graphics-hook32.dll", "68 ? ? ? ? E8 ? ? ? ? 83 C4 0C FF 75 18");

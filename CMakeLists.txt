@@ -41,6 +41,10 @@ if("${CMAKE_SIZEOF_VOID_P}" STREQUAL "4")
 	add_library(obsoverlay_d3d9 SHARED src/examples/obsoverlay_d3d9.cpp)
 	target_link_libraries(obsoverlay_d3d9 imgui)
 	target_link_libraries(obsoverlay_d3d9 imogui)
+
+	add_library(obsoverlay_opengl SHARED src/examples/obsoverlay_opengl.cpp)
+	target_link_libraries(obsoverlay_opengl imgui)
+	target_link_libraries(obsoverlay_opengl imogui)
 endif()
 
 if("${CMAKE_SIZEOF_VOID_P}" STREQUAL "8")
