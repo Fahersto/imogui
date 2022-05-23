@@ -66,7 +66,6 @@ namespace imogui
 		{
 		case Renderapi::OPENGL:	
 			hookAddress = Utility::Scan("DiscordHook64.dll", "FF 15 ? ? ? ? 48 8D 05 ? ? ? ? 48 89 84 24 ? ? ? ? 48 89 B4 24 ? ? ? ? 4C");
-			discordMidfunctionHook = std::make_shared<>();
 			discordMidfunctionHook.Hook(hookAddress,
 				[](hookftw::context* ctx) {
 					OpenGLSwapbuffersMidfunction((HDC)ctx->rcx);
