@@ -22,7 +22,7 @@ Overlay | 				OpenGL		|	 DirectX 9 					| DirectX 11 				| DirectX 12
 Steam   				| 	 :heavy_check_mark:    |		:heavy_check_mark:		|		:x:		 			|		:x:		 
 Discord   				| 	 :heavy_check_mark:    |		:heavy_check_mark:		|		:x:		 			|		:x:		
 Origin   				| 	 :x:    |		:x:	  					|		:x:		 			|		:x:		 
-MSI Afterburner			| 	 :x:    |		:x:	   					|		:x:		 			|		:x:		 
+MSI Afterburner			| 	 :heavy_check_mark:    |		:x:	   					|		:x:		 			|		:x:		 
 Overwolf   				| 	 :x:    |		:x:	   					|		:x:		 			|		:x:		 
 GeForce Experience		| 	 :x:    |		:x:	   					|		:x:		 			|		:x:		
 OBS						| 	 :heavy_check_mark:    |		:heavy_check_mark:	   	|		:x:		 			|		:x:		
@@ -33,10 +33,12 @@ Overlay | 				OpenGL		|	 DirectX 9 					| DirectX 11				| DirectX 12
 Steam   				| 	 :heavy_check_mark:    |		:x:	   |				:heavy_check_mark:			|		:x:			 
 Discord   				| 	 :heavy_check_mark:    |		:x:	   |				:heavy_check_mark:			|		:x:	
 Origin   				| 	 :x:    |		:x:	   |				:heavy_check_mark:			|		:x:			 
-MSI Afterburner			| 	 :x:    |		:x:	   |				:heavy_check_mark:			|		:x:			 	 
+MSI Afterburner			| 	 :heavy_check_mark:    |		:x:	   |				:heavy_check_mark:			|		:x:			 	 
 Overwolf   				| 	 :x:    |		:x:	   |				:x:							|		:x:		
 GeForce Experience		| 	 :x:    |		:x:	   |				:x:		 					|		:x:		
 OBS						| 	 :heavy_check_mark:    |		:x:	   |		:heavy_check_mark:		 			|		:x:		
+
+*MSI Afterburner includes the Rivatuner Statistics Server which is the overlay hooked.
 
 ## Roadmap
 - Add support for DirectX 12
