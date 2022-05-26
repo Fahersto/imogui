@@ -4,6 +4,7 @@
 
 #include "imgui/imgui.h"
 #include "imgui/imgui_impl_win32.h"
+#include "imgui/imgui_impl_opengl3.h"
 #include "imgui/imgui_impl_dx9.h"
 #include "imgui/imgui_impl_dx11.h"
 
@@ -191,6 +192,46 @@ namespace imogui
 		return (int8_t*)hkOpenGL_wglSwapBuffers;
 	}
 	*/
+
+	void DrawHooks::OpenGLSwapbuffersMidfunction(HDC hDc)
+	{
+		static bool firstTime = true;
+		if (firstTime)
+		{
+			firstTime = false;
+
+			ImGui::CreateContext();
+			ImGuiIO& io = ImGui::GetIO();
+			io.ConfigFlags = ImGuiConfigFlags_NoMouseCursorChange;
+
+			HWND hWnd = WindowFromDC(hDc);
+
+			RECT rect;
+			GetClientRect(hWnd, &rect);
+			Renderer::Get().SetWidth(rect.right);
+			Renderer::Get().SetHeight(rect.bottom);
+
+
+			InputHandler::HookWndProc(hWnd);
+
+			ImGui_ImplWin32_Init(hWnd);
+			ImGui_ImplOpenGL3_Init();
+		}
+
+		ImGui_ImplOpenGL3_NewFrame();
+		ImGui_ImplWin32_NewFrame();
+		ImGui::NewFrame();
+
+		Renderer::Get().BeginScene();
+
+		DrawHooks::renderCallback(Renderer::Get());
+
+		Renderer::Get().EndScene();
+
+		ImGui::EndFrame();
+		ImGui::Render();
+		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+	}
 
 	int8_t* DrawHooks::GetPointerToHookedDirect3DDevice9Present()
 	{

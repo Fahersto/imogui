@@ -32,46 +32,6 @@ namespace imogui
 		HRESULT hr;
 	}
 
-	void OpenGLSwapbuffersMidfunction(HDC hDc)
-	{
-		static bool firstTime = true;
-		if (firstTime)
-		{
-			firstTime = false;
-
-			ImGui::CreateContext();
-			ImGuiIO& io = ImGui::GetIO();
-			io.ConfigFlags = ImGuiConfigFlags_NoMouseCursorChange;
-
-			HWND hWnd = WindowFromDC(hDc);
-	
-			RECT rect;
-			GetClientRect(hWnd, &rect);
-			Renderer::Get().SetWidth(rect.right);
-			Renderer::Get().SetHeight(rect.bottom);
-
-
-			InputHandler::HookWndProc(hWnd);
-
-			ImGui_ImplWin32_Init(hWnd);
-			ImGui_ImplOpenGL3_Init();
-		}
-
-		ImGui_ImplOpenGL3_NewFrame();
-		ImGui_ImplWin32_NewFrame();
-		ImGui::NewFrame();
-
-		Renderer::Get().BeginScene();
-
-		DrawHooks::renderCallback(Renderer::Get());
-
-		Renderer::Get().EndScene();
-
-		ImGui::EndFrame();
-		ImGui::Render();
-		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-	}
-
 	void D3D9PresentMidfunction(IDirect3DDevice9* device)
 	{
 		static bool firstTime = true;
@@ -194,12 +154,12 @@ namespace imogui
 		switch (api)
 		{
 		case Renderapi::OPENGL:
-			hookAddress = Utility::Scan("graphics-hook64.dll", "48 8D 15 ?? ?? ?? ?? 48 89 1D ?? ?? ?? ?? 48 8D 0D");
+			hookAddress = Utility::Scan("graphics-hook64.dll", "48 8D 15 ?? ?? ?? ?? 48 89 1D ?? ?? ?? ?? 48 8D 0D ?? ?? ?? ?? E8 ?? ?? ?? ?? E8 ?? ?? ?? ?? 85 C0 0F 94 C3 85 C0 75 64");
 			hookAddress += *(int32_t*)(hookAddress + 3) + 7;
 
 			midFunction.Hook(hookAddress,
 				[](hookftw::context* ctx) {
-					OpenGLSwapbuffersMidfunction((HDC)ctx->rcx);
+					DrawHooks::OpenGLSwapbuffersMidfunction((HDC)ctx->rcx);
 				}
 			);
 			break;
@@ -209,7 +169,7 @@ namespace imogui
 			//DrawHooks::originalDirect3DDevice9Present = (Direct3DDevice9_Present)obsOverlayHook.Hook(hookAddress, DrawHooks::GetPointerToHookedDirect3DDevice9Present());
 			break;
 		case Renderapi::DIRECTX11:
-			hookAddress = Utility::Scan("graphics-hook64.dll", "44 8B C6 65 48 8B 04 25 ? ? ? ? BA ? ? ? ? 48 8B 1C C8 48 8B CF");
+			hookAddress = Utility::Scan("graphics-hook64.dll", "44 8B C6 65 48 8B 04 25 58 00 00 00");
 			
 			midFunction.Hook(hookAddress, 
 				[](hookftw::context* ctx) {
@@ -227,7 +187,7 @@ namespace imogui
 
 			midFunction.Hook(hookAddress,
 				[](hookftw::context* ctx) {
-					OpenGLSwapbuffersMidfunction((HDC)*(int32_t*)(ctx->esp + 4));
+					DrawHooks::OpenGLSwapbuffersMidfunction((HDC)*(int32_t*)(ctx->esp + 4));
 				}
 			);
 

@@ -16,46 +16,6 @@ namespace imogui
 	hookftw::MidfunctionHook discordMidfunctionHook;
 	bool usedMidfunctionHook = false;
 
-	void OpenGLSwapbuffersMidfunction(HDC hDc)
-	{
-		static bool firstTime = true;
-		if (firstTime)
-		{
-			firstTime = false;
-
-			ImGui::CreateContext();
-			ImGuiIO& io = ImGui::GetIO();
-			io.ConfigFlags = ImGuiConfigFlags_NoMouseCursorChange;
-
-			HWND hWnd = WindowFromDC(hDc);
-
-			RECT rect;
-			GetClientRect(hWnd, &rect);
-			Renderer::Get().SetWidth(rect.right);
-			Renderer::Get().SetHeight(rect.bottom);
-
-
-			InputHandler::HookWndProc(hWnd);
-
-			ImGui_ImplWin32_Init(hWnd);
-			ImGui_ImplOpenGL3_Init();
-		}
-
-		ImGui_ImplOpenGL3_NewFrame();
-		ImGui_ImplWin32_NewFrame();
-		ImGui::NewFrame();
-
-		Renderer::Get().BeginScene();
-
-		DrawHooks::renderCallback(Renderer::Get());
-
-		Renderer::Get().EndScene();
-
-		ImGui::EndFrame();
-		ImGui::Render();
-		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-	}
-
 	void Discordoverlay::Hook(Renderapi api, std::function<void(Renderer&)> drawCallback)
 	{
 		DrawHooks::renderCallback = drawCallback;
@@ -68,7 +28,7 @@ namespace imogui
 			hookAddress = Utility::Scan("DiscordHook64.dll", "FF 15 ? ? ? ? 48 8D 05 ? ? ? ? 48 89 84 24 ? ? ? ? 48 89 B4 24 ? ? ? ? 4C");
 			discordMidfunctionHook.Hook(hookAddress,
 				[](hookftw::context* ctx) {
-					OpenGLSwapbuffersMidfunction((HDC)ctx->rcx);
+					DrawHooks::OpenGLSwapbuffersMidfunction((HDC)ctx->rcx);
 				}
 			);
 			usedMidfunctionHook = true;
@@ -88,7 +48,7 @@ namespace imogui
 			hookAddress = Utility::Scan("DiscordHook.dll", "FF 15 ? ? ? ? 8D 84 24 ? ? ? ? C7 84 24 ? ? ? ? ? ? ? ? C7 84 24 ? ? ? ? ? ? ? ? 89 9C 24");
 			discordMidfunctionHook.Hook(hookAddress,
 				[](hookftw::context* ctx) {
-					OpenGLSwapbuffersMidfunction((HDC)*(int32_t*)ctx->esp);
+					DrawHooks::OpenGLSwapbuffersMidfunction((HDC)*(int32_t*)ctx->esp);
 				}
 			);
 			usedMidfunctionHook = true;
