@@ -1,3 +1,4 @@
+![example workflow](https://github.com/fahersto/imogui/actions/workflows/cmake.yml/badge.svg)
 # imogui - draw on overlays using imgui
 A GUI library which hooks existing overlays to draw on them using imgui (https://github.com/ocornut/imgui). The project includes hookFTW (a hooking library) as a submodule which in turn includes zydis (a disassembler) as a submodule.
 
