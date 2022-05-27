@@ -20,7 +20,7 @@ namespace imogui
 
 	void Steamoverlay::Hook(Renderapi api, std::function<void(Renderer&)> drawCallback)
 	{
-		DrawHooks::renderCallback  = drawCallback;
+		DrawHooks::renderCallback = drawCallback;
 		int8_t* hookAddress = nullptr;
 
 #ifdef _WIN64
@@ -44,16 +44,19 @@ namespace imogui
 			hookAddress = Utility::Scan("GameOverlayRenderer64.dll", "48 89 6C 24 18 48 89 74 24 20 41 56 48 83 EC 20 41");
 			DrawHooks::oDirectX11SwapchainPresent = (DirectX11_IDXGISwapChain_Present)steamoverlayHook.Hook(hookAddress, DrawHooks::GetPointerToHookedDirectX11SwapchainPresent());
 			break;
+		case Renderapi::DIRECTX12:
+			assert(false);
+			break;
 		}
 #elif _WIN32
 		switch (api)
 		{
 		case Renderapi::OPENGL:
 			steamoverlaMidfunctionHook.Hook(
-				Utility::Scan("GameOverlayRenderer.dll", "55 8B EC 83 EC 10 8D 45 F0 50"), 
+				Utility::Scan("GameOverlayRenderer.dll", "55 8B EC 83 EC 10 8D 45 F0 50"),
 				[](hookftw::context* ctx)
 				{
-					DrawHooks::OpenGLSwapbuffersMidfunction((HDC)*(int32_t*)(ctx->esp+4));
+					DrawHooks::OpenGLSwapbuffersMidfunction((HDC) * (int32_t*)(ctx->esp + 4));
 				});
 			usedMidfunctionHook = true;
 			break;
@@ -66,8 +69,6 @@ namespace imogui
 			break;
 		}
 #endif
-
-	
 	}
 
 	void Steamoverlay::Unhook()
@@ -82,5 +83,4 @@ namespace imogui
 		}
 		InputHandler::UnhookWndProc();
 	}
-
 }

@@ -18,7 +18,6 @@ namespace imogui
 {
 	std::function<void(Renderer&)> DrawHooks::renderCallback = nullptr;
 
-	//OpenGl_SwapBuffers DrawHooks::originalOpenGlSwapBuffers = nullptr;
 	Direct3DDevice9_Present DrawHooks::originalDirect3DDevice9Present = nullptr;
 	DirectX11_IDXGISwapChain_Present DrawHooks::oDirectX11SwapchainPresent = nullptr;
 
