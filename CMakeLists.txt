@@ -64,6 +64,10 @@ if("${CMAKE_SIZEOF_VOID_P}" STREQUAL "8")
 	target_link_libraries(steam_d3d11 imgui)
 	target_link_libraries(steam_d3d11 imogui)
 
+	add_library(native_d3d12 SHARED src/examples/native_d3d12.cpp)
+	target_link_libraries(native_d3d12 imgui)
+	target_link_libraries(native_d3d12 imogui)
+
 	add_library(steam_opengl SHARED src/examples/steam_opengl.cpp)
 	target_link_libraries(steam_opengl imgui)
 	target_link_libraries(steam_opengl imogui)

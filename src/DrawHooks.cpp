@@ -17,7 +17,6 @@ namespace imogui
 {
 	std::function<void(Renderer&)> DrawHooks::renderCallback = nullptr;
 
-	//OpenGl_SwapBuffers DrawHooks::originalOpenGlSwapBuffers = nullptr;
 	Direct3DDevice9_Present DrawHooks::originalDirect3DDevice9Present = nullptr;
 	DirectX11_IDXGISwapChain_Present DrawHooks::oDirectX11SwapchainPresent = nullptr;
 
@@ -33,40 +32,6 @@ namespace imogui
 		D3D11_VIEWPORT viewport;
 		HRESULT hr;
 	}
-
-	/*
-	bool __stdcall hkOpenGL_wglSwapBuffers(_In_ HDC hdc, UINT unnamed)
-	{
-
-		static bool firstTime = true;
-
-		if (firstTime)
-		{
-			IMGUI_CHECKVERSION();
-			ImGui::CreateContext();
-			ImGui_ImplWin32_Init(WindowFromDC(hdc));
-			ImGui_ImplOpenGL3_Init();
-			firstTime = false;
-		}
-		else
-		{
-			ImGui_ImplWin32_NewFrame();
-			ImGui_ImplOpenGL3_NewFrame();
-			ImGui::NewFrame();
-
-			Renderer::Get()->BeginScene();
-
-			DrawHooks::renderCallback(Renderer::Get());
-
-			Renderer::Get()->EndScene();
-
-			ImGui::EndFrame();
-			ImGui::Render();
-			ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-		}
-		return DrawHooks::originalOpenGlSwapBuffers(hdc, unnamed);
-	}
-	*/
 
 	int64_t __stdcall hkD3D9Present(IDirect3DDevice9* device, const RECT* src, const RECT* dest, HWND wnd_override, const RGNDATA* dirty_region)
 	{
@@ -185,13 +150,6 @@ namespace imogui
 
 		return DrawHooks::oDirectX11SwapchainPresent(pSwapChain, SyncInterval, Flags);
 	}
-
-	/*
-	int8_t* DrawHooks::GetPointerToHookedOPenGlSwapBuffers()
-	{
-		return (int8_t*)hkOpenGL_wglSwapBuffers;
-	}
-	*/
 
 	void DrawHooks::OpenGLSwapbuffersMidfunction(HDC hDc)
 	{

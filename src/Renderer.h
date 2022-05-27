@@ -22,7 +22,8 @@ namespace imogui
 	{
 		OPENGL,
 		DIRECTX9,
-		DIRECTX11
+		DIRECTX11,
+		DIRECTX12
 	};
 
 	class Renderer
